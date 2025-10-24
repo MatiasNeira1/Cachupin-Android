@@ -4,24 +4,7 @@
             "outputFile": "com.example.cachupin.app-mergeDebugResources-40:/values-kk/values-kk.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\194d74923ccf9b34f2d7cfabbdc32673\\transformed\\core-1.17.0\\res\\values-kk\\values-kk.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,155,257,359,462,566,663,774",
-                        "endColumns": "99,101,101,102,103,96,110,100",
-                        "endOffsets": "150,252,354,457,561,658,769,870"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6,7,8,9,83",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "183,283,385,487,590,694,791,8525",
-                        "endColumns": "99,101,101,102,103,96,110,100",
-                        "endOffsets": "278,380,482,585,689,786,897,8621"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\2cb3d6098226165789277dd59f381f39\\transformed\\foundation-release\\res\\values-kk\\values-kk.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\cc546668ecccdcf0f5c14e63a7d92bcc\\transformed\\foundation-release\\res\\values-kk\\values-kk.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",
@@ -38,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\810e0aa306132f246cc819e9c82c7408\\transformed\\ui-release\\res\\values-kk\\values-kk.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\fbda7bc9f04fd0cc343f4ba68ba4005f\\transformed\\ui-release\\res\\values-kk\\values-kk.xml",
                     "from": {
                         "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\54fd8f6de1880115307692cfda3f1d70\\transformed\\material3-release\\res\\values-kk\\values-kk.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\d05323a336b73e5dcbd4ff8372fa43e9\\transformed\\material3-release\\res\\values-kk\\values-kk.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -69,6 +52,23 @@
                         "startOffsets": "1546,1664,1782,1897,2013,2115,2216,2334,2472,2597,2722,2806,2909,2999,3096,3212,3336,3444,3586,3726,3858,4017,4140,4255,4374,4489,4580,4678,4801,4936,5040,5151,5257,5396,5541,5649,5749,5835,5928,6021,6129,6215,6299,6403,6492,6577,6678,6782,6879,6975,7062,7166,7265,7363,7500,7590,7701",
                         "endColumns": "117,117,114,115,101,100,117,137,124,124,83,102,89,96,115,123,107,141,139,131,158,122,114,118,114,90,97,122,134,103,110,105,138,144,107,99,85,92,92,107,85,83,103,88,84,100,103,96,95,86,103,98,97,136,89,110,100",
                         "endOffsets": "1659,1777,1892,2008,2110,2211,2329,2467,2592,2717,2801,2904,2994,3091,3207,3331,3439,3581,3721,3853,4012,4135,4250,4369,4484,4575,4673,4796,4931,5035,5146,5252,5391,5536,5644,5744,5830,5923,6016,6124,6210,6294,6398,6487,6572,6673,6777,6874,6970,7057,7161,7260,7358,7495,7585,7696,7797"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\16126985027d5dafc1a284e77d89fd8a\\transformed\\core-1.17.0\\res\\values-kk\\values-kk.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,155,257,359,462,566,663,774",
+                        "endColumns": "99,101,101,102,103,96,110,100",
+                        "endOffsets": "150,252,354,457,561,658,769,870"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,83",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "183,283,385,487,590,694,791,8525",
+                        "endColumns": "99,101,101,102,103,96,110,100",
+                        "endOffsets": "278,380,482,585,689,786,897,8621"
                     }
                 }
             ]

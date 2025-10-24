@@ -4,41 +4,24 @@
             "outputFile": "com.example.cachupin.app-mergeDebugResources-40:/values-ms/values-ms.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\194d74923ccf9b34f2d7cfabbdc32673\\transformed\\core-1.17.0\\res\\values-ms\\values-ms.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\cc546668ecccdcf0f5c14e63a7d92bcc\\transformed\\foundation-release\\res\\values-ms\\values-ms.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,150,252,349,459,565,683,798",
-                        "endColumns": "94,101,96,109,105,117,114,100",
-                        "endOffsets": "145,247,344,454,560,678,793,894"
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,133,220",
+                        "endColumns": "77,86,90",
+                        "endOffsets": "128,215,306"
                     },
                     "to": {
-                        "startLines": "3,4,5,6,7,8,9,83",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "183,278,380,477,587,693,811,8589",
-                        "endColumns": "94,101,96,109,105,117,114,100",
-                        "endOffsets": "273,375,472,582,688,806,921,8685"
+                        "startLines": "2,87,88",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "105,8952,9039",
+                        "endColumns": "77,86,90",
+                        "endOffsets": "178,9034,9125"
                     }
                 },
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\810e0aa306132f246cc819e9c82c7408\\transformed\\ui-release\\res\\values-ms\\values-ms.xml",
-                    "from": {
-                        "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "184,274,358,454,556,641,724,819,906,991,1076,1162,1234,1321,1398,1471,1544,1620,1686",
-                        "endColumns": "89,83,95,101,84,82,94,86,84,84,85,71,86,76,72,72,75,65,119",
-                        "endOffsets": "269,353,449,551,636,719,814,901,986,1071,1157,1229,1316,1393,1466,1539,1615,1681,1801"
-                    },
-                    "to": {
-                        "startLines": "10,11,12,13,14,15,16,74,75,76,77,78,79,80,81,82,84,85,86",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "926,1016,1100,1196,1298,1383,1466,7864,7951,8036,8121,8207,8279,8366,8443,8516,8690,8766,8832",
-                        "endColumns": "89,83,95,101,84,82,94,86,84,84,85,71,86,76,72,72,75,65,119",
-                        "endOffsets": "1011,1095,1191,1293,1378,1461,1556,7946,8031,8116,8202,8274,8361,8438,8511,8584,8761,8827,8947"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\54fd8f6de1880115307692cfda3f1d70\\transformed\\material3-release\\res\\values-ms\\values-ms.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\d05323a336b73e5dcbd4ff8372fa43e9\\transformed\\material3-release\\res\\values-ms\\values-ms.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,20 +38,37 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\2cb3d6098226165789277dd59f381f39\\transformed\\foundation-release\\res\\values-ms\\values-ms.xml",
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\fbda7bc9f04fd0cc343f4ba68ba4005f\\transformed\\ui-release\\res\\values-ms\\values-ms.xml",
                     "from": {
-                        "startLines": "2,3,4",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,133,220",
-                        "endColumns": "77,86,90",
-                        "endOffsets": "128,215,306"
+                        "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "184,274,358,454,556,641,724,819,906,991,1076,1162,1234,1321,1398,1471,1544,1620,1686",
+                        "endColumns": "89,83,95,101,84,82,94,86,84,84,85,71,86,76,72,72,75,65,119",
+                        "endOffsets": "269,353,449,551,636,719,814,901,986,1071,1157,1229,1316,1393,1466,1539,1615,1681,1801"
                     },
                     "to": {
-                        "startLines": "2,87,88",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "105,8952,9039",
-                        "endColumns": "77,86,90",
-                        "endOffsets": "178,9034,9125"
+                        "startLines": "10,11,12,13,14,15,16,74,75,76,77,78,79,80,81,82,84,85,86",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "926,1016,1100,1196,1298,1383,1466,7864,7951,8036,8121,8207,8279,8366,8443,8516,8690,8766,8832",
+                        "endColumns": "89,83,95,101,84,82,94,86,84,84,85,71,86,76,72,72,75,65,119",
+                        "endOffsets": "1011,1095,1191,1293,1378,1461,1556,7946,8031,8116,8202,8274,8361,8438,8511,8584,8761,8827,8947"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Cetecom\\.gradle\\caches\\8.13\\transforms\\16126985027d5dafc1a284e77d89fd8a\\transformed\\core-1.17.0\\res\\values-ms\\values-ms.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,150,252,349,459,565,683,798",
+                        "endColumns": "94,101,96,109,105,117,114,100",
+                        "endOffsets": "145,247,344,454,560,678,793,894"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,83",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "183,278,380,477,587,693,811,8589",
+                        "endColumns": "94,101,96,109,105,117,114,100",
+                        "endOffsets": "273,375,472,582,688,806,921,8685"
                     }
                 }
             ]
