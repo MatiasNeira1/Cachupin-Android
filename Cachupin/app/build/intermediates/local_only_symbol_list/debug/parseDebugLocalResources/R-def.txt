@@ -7,8 +7,17 @@ color purple_700
 color teal_200
 color teal_700
 color white
+drawable banner_img
+drawable caja_arena_gato
+drawable comida_gato
+drawable comida_perro1
+drawable comida_perro2
+drawable comida_perro3
+drawable comida_perro4
+drawable correa_gato
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable juguete_gato
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name

@@ -1,20 +1,56 @@
 package com.example.cachupin
 
+import com.example.cachupin.ui.screens.Menu.MenuScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.cachupin.ui.screens.Login.LoginScreen
+import com.example.cachupin.ui.screens.Productos.ProductosScreen
+import com.example.cachupin.ui.screens.Carrito.CarritoScreen
+import com.example.cachupin.ui.screens.Register.RegisterScreen
+import com.example.cachupin.ui.screens.ScanPet.ScanPetScreen
+import com.example.cachupin.ui.screens.DatePicker.DatePickerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface {
+                    AppNavigation()
+                }
+            }
+        }
     }
 }
+
+sealed class Route(val path: String) {
+    object Login : Route("login")
+    object Menu : Route("menu")
+    object Productos : Route("productos")
+    object Carrito : Route("carrito")
+    object Register : Route("register")
+    object ScanPet : Route("scanpet")
+    object DatePicker : Route("datepicker")
+}
+
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Route.Login.path) {
+        composable(Route.Login.path) { LoginScreen(navController) }
+        composable(Route.Menu.path) { MenuScreen(navController) }
+        composable(Route.Productos.path) { ProductosScreen(navController) }
+        composable(Route.Carrito.path) { CarritoScreen(navController) }
+        composable(Route.Register.path) { RegisterScreen(navController) }
+        composable(Route.ScanPet.path) { ScanPetScreen(navController) }
+        composable(Route.DatePicker.path) { DatePickerScreen(navController) }
+    }
+}
+
