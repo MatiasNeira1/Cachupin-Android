@@ -53,7 +53,7 @@ fun ScanPetScreen(navController: NavController) {
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("¡Escanea la imagen de tu mascota!")
+            Text("¡Escanea la imagen de tu mascota o de su documento!")
             Spacer(modifier = Modifier.height(16.dp))
 
             AndroidView(
@@ -68,7 +68,7 @@ fun ScanPetScreen(navController: NavController) {
             Button(onClick = {
                 Toast.makeText(context, "Botón de escaneo presionado", Toast.LENGTH_SHORT).show()
             }) {
-                Text("Escanear Mascota")
+                Text("Escanear Mascota o documento")
             }
         }
     }
