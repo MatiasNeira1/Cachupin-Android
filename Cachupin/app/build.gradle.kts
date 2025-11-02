@@ -49,8 +49,12 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.10.01"))
     implementation("androidx.compose.foundation:foundation:1.0.0") // If needed
     implementation("androidx.compose.runtime:runtime:1.0.0") // If needed
-
+    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
+    implementation("androidx.compose.material3:material3:1.3.0")
     // Camera dependencies
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.ui:ui:1.6.0")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.camera:camera-core:1.5.1")
     implementation("androidx.camera:camera-camera2:1.5.1")
     implementation("androidx.camera:camera-lifecycle:1.5.1")

@@ -45,6 +45,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:mimeType="vnd.android.cursor.item/event" />
             </intent-filter>
         </activity>
 

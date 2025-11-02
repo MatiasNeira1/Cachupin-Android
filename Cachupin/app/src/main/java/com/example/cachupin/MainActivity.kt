@@ -10,12 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.cachupin.ui.screens.Login.LoginScreen
 import com.example.cachupin.ui.screens.Productos.ProductosScreen
 import com.example.cachupin.ui.screens.Carrito.CarritoScreen
+import com.example.cachupin.ui.screens.DatePickerScreen
 import com.example.cachupin.ui.screens.Register.RegisterScreen
 import com.example.cachupin.ui.screens.ScanPet.ScanPetScreen
-import com.example.cachupin.ui.screens.DatePicker.DatePickerScreen
+import com.example.cachupin.ui.screens.Login.LoginScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

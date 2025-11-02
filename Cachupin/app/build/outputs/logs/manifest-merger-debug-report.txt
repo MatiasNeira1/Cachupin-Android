@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-37:12
-INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-37:12
-INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-37:12
-INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-37:12
+ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-38:12
+INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-38:12
+INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-38:12
+INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:2:1-38:12
 MERGED from [androidx.camera:camera-video:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\a4d39fcd5730834fc42dc2d70a36f03c\transformed\camera-video-1.5.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.camera:camera-view:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\926fafc63e23461996098966b3d247f8\transformed\camera-view-1.5.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.camera:camera-lifecycle:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\b3a4457bf5bd871433578fba2736618d\transformed\camera-lifecycle-1.5.1\AndroidManifest.xml:2:1-7:12
@@ -117,8 +117,8 @@ ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest
 	android:name
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:9:22-69
 application
-ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:13:5-36:19
-INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:13:5-36:19
+ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:13:5-37:19
+INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:13:5-37:19
 MERGED from [androidx.camera:camera-camera2:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\1ef7322ee183584eeafb7f63bab3ebe9\transformed\camera-camera2-1.5.1\AndroidManifest.xml:23:5-34:19
 MERGED from [androidx.camera:camera-camera2:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\1ef7322ee183584eeafb7f63bab3ebe9\transformed\camera-camera2-1.5.1\AndroidManifest.xml:23:5-34:19
 MERGED from [androidx.camera:camera-core:1.5.1] C:\Users\diegm\.gradle\caches\8.13\transforms\788711ed3bc90e643550af7cd54d77e8\transformed\camera-core-1.5.1\AndroidManifest.xml:23:5-34:19
@@ -164,7 +164,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\di
 	android:dataExtractionRules
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:15:9-65
 activity#com.example.cachupin.MainActivity
-ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:23:9-34:20
+ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:23:9-35:20
 	android:label
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:26:13-45
 	android:exported
@@ -173,8 +173,8 @@ ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:27:13-50
 	android:name
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:24:13-40
-intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:29:13-32:29
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+data:mimeType:vnd.android.cursor.item/event
+ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:29:13-33:29
 action#android.intent.action.MAIN
 ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:30:17-69
 	android:name
@@ -183,6 +183,10 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:31:17-77
 	android:name
 		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:31:27-74
+data
+ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:32:17-74
+	android:mimeType
+		ADDED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml:32:23-71
 uses-sdk
 INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\diegm\Cachupin-Android\Cachupin\app\src\main\AndroidManifest.xml

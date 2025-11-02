@@ -45,15 +45,19 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:mimeType="vnd.android.cursor.item/event" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="androidx.compose.ui.tooling.PreviewActivity"
-            android:exported="true" />
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <service
+            android:name="androidx.camera.core.impl.MetadataHolderService"
+            android:enabled="false"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+        </service>
 
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -69,6 +73,13 @@
                 android:name="androidx.profileinstaller.ProfileInstallerInitializer"
                 android:value="androidx.startup" />
         </provider>
+
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:exported="true" />
+        <activity
+            android:name="androidx.compose.ui.tooling.PreviewActivity"
+            android:exported="true" />
 
         <receiver
             android:name="androidx.profileinstaller.ProfileInstallReceiver"

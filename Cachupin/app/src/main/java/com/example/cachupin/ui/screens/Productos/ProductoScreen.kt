@@ -41,7 +41,12 @@ fun ProductosScreen(navController: NavController? = null) {
         Producto(R.drawable.correa_gato, "Correa para gato", 5990),
         Producto(R.drawable.comida_gato, "Comida húmeda", 10990),
         Producto(R.drawable.caja_arena_gato, "Caja de arena para gato", 20990),
-        Producto(R.drawable.juguete_gato, "Juguete interactivo", 12990)
+        Producto(R.drawable.juguete_gato, "Juguete interactivo", 12990),
+        Producto(R.drawable.comida_perro1, "Comida para perro basica", 5990),
+        Producto(R.drawable.comida_perro2, "Comida húmeda", 10990),
+        Producto(R.drawable.comida_perro3, "Comida perro 10Kg", 20990),
+        Producto(R.drawable.comida_perro4, "Comida perro 5Kg", 12990)
+
     )
 
     var carrito by remember { mutableStateOf(CartStorage.load(context)) }
