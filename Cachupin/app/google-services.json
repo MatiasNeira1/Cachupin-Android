@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "949535830870",
+    "project_id": "cachupin-319c4",
+    "storage_bucket": "cachupin-319c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949535830870:android:7ed122a4c36d1c80ec1cf7",
+        "android_client_info": {
+          "package_name": "com.example.cachupin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAITWJ-UMOGNMm-TAkrzyrawF1dvQ8lQvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

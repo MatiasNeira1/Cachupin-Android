@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
+
+
+
 }
 
 android {
@@ -42,29 +46,48 @@ android {
 }
 
 dependencies {
-    // Compose dependencies
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-auth:24.0.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-firestore:26.0.2")
+    implementation("com.google.firebase:firebase-database:22.0.1")
+
+    // Dependencies for Compose
+    implementation("androidx.compose.ui:ui:1.9.5")
+    implementation("androidx.compose.material:material:1.9.5")
+    implementation("androidx.compose.material3:material3:1.4.0")
+    // Añadido para Firebase Messaging (si lo necesitas)
+    implementation("com.google.firebase:firebase-messaging:25.0.1")
+
+    // Dependencies para Compose
+    implementation("androidx.compose.material:material-icons-extended:1.0.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.9.5")
     implementation("androidx.compose.ui:ui:1.0.0")
     implementation("androidx.compose.material:material:1.0.0")
-    implementation("androidx.compose.material3:material3:1.0.0")
-    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
-    implementation("androidx.compose.foundation:foundation:1.0.0") // If needed
-    implementation("androidx.compose.runtime:runtime:1.0.0") // If needed
-    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
-    implementation("androidx.compose.material3:material3:1.3.0")
-    // Camera dependencies
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.ui:ui:1.6.0")
-    implementation("androidx.navigation:navigation-compose:2.7.3")
+
+
+    implementation("androidx.compose.ui:ui:1.9.5")
+    implementation("androidx.compose.material:material:1.9.5")
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation(platform("androidx.compose:compose-bom:2025.11.01"))
+    implementation("androidx.compose.foundation:foundation:1.0.0")
+    implementation("androidx.compose.runtime:runtime:1.9.5")
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation("androidx.compose.ui:ui:1.9.5")
+    implementation("androidx.navigation:navigation-compose:2.9.6")
+
+    // Dependencies para la cámara (si es necesario)
     implementation("androidx.camera:camera-core:1.5.1")
     implementation("androidx.camera:camera-camera2:1.5.1")
     implementation("androidx.camera:camera-lifecycle:1.5.1")
     implementation("androidx.camera:camera-view:1.5.1")
 
-    // Material Components for Android
-    implementation("com.google.android.material:material:1.6.0")
-
-    // Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.8.3")
+    // Material Components para Android
+    implementation("com.google.android.material:material:1.13.0")
 
     // Activity Compose
     implementation("androidx.activity:activity-compose")
@@ -72,16 +95,9 @@ dependencies {
     // Lifecycle Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
 
-    // Debug and testing
+    // Debug y testing
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // JUnit for testing
-    testImplementation("junit:junit:4.13.2")  // Cambia según la versión de JUnit que uses
-    androidTestImplementation("androidx.junit:jest:1.1.2") // Cambia a la versión que sea compatible
-    androidTestImplementation("androidx.espresso:espresso-core:3.4.0")
 
-    // Debug tooling
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
