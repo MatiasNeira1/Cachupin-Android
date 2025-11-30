@@ -1,104 +1,77 @@
 package com.example.cachupin.frontend.data.repository
 
 import com.example.cachupin.domain.CarritoItem
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 object CartStorage {
+    private val db = FirebaseFirestore.getInstance()
 
-    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-
-    private fun cartDocRef() =
-        auth.currentUser?.uid?.let { uid ->
-            db.collection("carts").document(uid)
-        }
-
-    fun load(
-        onResult: (List<CarritoItem>) -> Unit,
-        onError: (Exception) -> Unit = {}
-    ) {
-        val docRef = cartDocRef()
-        if (docRef == null) {
-            onResult(emptyList())
-            return
-        }
-
-        docRef.get()
+    // Cargar carrito desde Firestore
+    fun load(onResult: (List<CarritoItem>) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("carrito")
+            .get()
             .addOnSuccessListener { snapshot ->
-                val items = mutableListOf<CarritoItem>()
+                val carrito = snapshot.documents.mapNotNull { doc ->
+                    val nombre = doc.getString("nombre") ?: return@mapNotNull null
+                    val precio = (doc.getLong("precio") ?: return@mapNotNull null).toInt()
+                    val qty = (doc.getLong("qty") ?: return@mapNotNull null).toInt()
+                    val categoria = doc.getString("categoria") ?: return@mapNotNull null
+                    val imageUrl = doc.getString("imageUrl") ?: return@mapNotNull null
 
-                @Suppress("UNCHECKED_CAST")
-                val rawList = snapshot.get("items") as? List<Map<String, Any>> ?: emptyList()
-
-                for (m in rawList) {
-                    val imageRes = (m["imageRes"] as? Long)?.toInt() ?: 0
-                    val nombre = m["nombre"] as? String ?: ""
-                    val precio = (m["precio"] as? Long)?.toInt() ?: 0
-                    val qty = (m["qty"] as? Long)?.toInt() ?: 1
-
-                    items.add(
-                        CarritoItem(
-                            imageRes = imageRes,
-                            nombre = nombre,
-                            precio = precio,
-                            qty = qty
-                        )
-                    )
+                    CarritoItem(nombre, precio, qty, categoria, imageUrl)
                 }
-
-                // Agrupar por producto por si vienen repetidos
-                val consolidados = items
-                    .groupBy { Triple(it.imageRes, it.nombre, it.precio) }
-                    .map { (k, list) ->
-                        CarritoItem(
-                            imageRes = k.first,
-                            nombre = k.second,
-                            precio = k.third,
-                            qty = list.sumOf { it.qty }
-                        )
-                    }
-
-                onResult(consolidados)
+                onResult(carrito)
             }
             .addOnFailureListener { e ->
                 onError(e)
             }
     }
 
-    /**
-     * Guarda el carrito completo en Firebase (sobrescribe).
-     */
-    fun save(
-        items: List<CarritoItem>,
-        onComplete: (Boolean) -> Unit = {}
-    ) {
-        val docRef = cartDocRef()
-        if (docRef == null) {
-            onComplete(false)
-            return
+    // Guardar carrito en Firestore
+    fun save(carrito: List<CarritoItem>, onResult: (Boolean) -> Unit) {
+        val batch = db.batch()
+        carrito.forEachIndexed { index, item ->
+            val docRef = db.collection("carrito").document("item_$index")
+            batch.set(docRef, mapOf(
+                "nombre" to item.nombre,
+                "precio" to item.precio,
+                "qty" to item.qty,
+                "categoria" to item.categoria,
+                "imageUrl" to item.imageUrl
+            ))
         }
-
-        val mapped = items.map {
-            mapOf(
-                "imageRes" to it.imageRes,
-                "nombre" to it.nombre,
-                "precio" to it.precio,
-                "qty" to it.qty
-            )
+        batch.commit().addOnCompleteListener { task ->
+            onResult(task.isSuccessful)
         }
-
-        val data = mapOf("items" to mapped)
-
-        docRef.set(data)
-            .addOnSuccessListener { onComplete(true) }
-            .addOnFailureListener { onComplete(false) }
     }
 
-    /**
-     * Vacía el carrito en Firebase.
-     */
-    fun clear(onComplete: (Boolean) -> Unit = {}) {
-        save(emptyList(), onComplete)
+    // Eliminar un producto del carrito
+    fun remove(item: CarritoItem, onResult: (List<CarritoItem>) -> Unit) {
+        db.collection("carrito")
+            .whereEqualTo("nombre", item.nombre)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                snapshot.documents.firstOrNull()?.reference?.delete()?.addOnCompleteListener {
+                    // Después de eliminar el producto del carrito, actualizamos el stock
+                    updateProductStock(item)
+                    // Recargamos el carrito actualizado
+                    load(onResult = onResult, onError = {})
+                }
+            }
+    }
+
+    // Actualizar el stock de un producto en Firestore
+    private fun updateProductStock(item: CarritoItem) {
+        val productRef = db.collection("productos").document(item.nombre)
+        productRef.get().addOnSuccessListener { doc ->
+            val stock = doc.getLong("stock")?.toInt() ?: 0
+            val newStock = stock + item.qty
+
+            productRef.update("stock", newStock)
+                .addOnSuccessListener {
+                }
+                .addOnFailureListener {
+                }
+        }
     }
 }

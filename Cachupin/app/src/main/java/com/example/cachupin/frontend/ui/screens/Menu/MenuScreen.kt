@@ -77,6 +77,7 @@ fun MenuScreen(navController: NavController) {
     var destacados by remember { mutableStateOf<List<DestacadoProducto>>(emptyList()) }
     var loadingDestacados by remember { mutableStateOf(true) }
 
+    // Cargar productos desde Firestore
     LaunchedEffect(Unit) {
         db.collection("productos")
             .limit(4)
