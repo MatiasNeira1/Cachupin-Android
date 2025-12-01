@@ -43,6 +43,15 @@ android {
 }
 
 dependencies {
+
+
+
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
     implementation("com.google.code.gson:gson:2.8.8")
     // Firebase dependencies
     implementation("com.google.android.gms:play-services-auth:19.2.0")
@@ -51,7 +60,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:22.0.1")
     implementation("com.google.firebase:firebase-auth:24.0.1")
     implementation("com.google.firebase:firebase-messaging:25.0.1")
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+
 
     // Room
     implementation(libs.androidx.room.common.jvm)
@@ -61,7 +70,6 @@ dependencies {
 
     // Dependencies for Compose
     implementation("androidx.compose.material:material-icons-extended:1.2.0")
-    implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("androidx.compose.ui:ui:1.9.5")
     implementation("androidx.compose.material:material:1.9.5")
     implementation("androidx.compose.material3:material3:1.4.0")

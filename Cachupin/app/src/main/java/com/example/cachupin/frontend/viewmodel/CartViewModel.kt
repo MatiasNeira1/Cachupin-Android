@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.cachupin.data.repository.CartRepository
+import com.example.cachupin.backend.data.repository.CartRepository
 import com.example.cachupin.domain.CarritoItem
 
 data class CartUiState(

@@ -1,4 +1,4 @@
-package com.example.cachupin.data.repository
+package com.example.cachupin.backend.data.repository
 
 import com.example.cachupin.domain.CarritoItem
 import com.example.cachupin.domain.Producto
@@ -11,7 +11,6 @@ class ProductosRepository(
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance(FirebaseApp.getInstance(), "cachupin-319c4")
 ) {
 
-
     fun listenProductos(
         onResult: (List<Producto>) -> Unit,
         onError: (Throwable) -> Unit
@@ -21,30 +20,40 @@ class ProductosRepository(
                     "appId=${FirebaseApp.getInstance().options.applicationId}"
         )
         return db.collection("productos")
+            .orderBy("nombre")
             .addSnapshotListener { snap, e ->
                 if (e != null) {
-                    android.util.Log.e("ProductosRepository", "Listener error", e)
+                    Log.e("ProductosRepository", "Listener error", e)
                     onError(e)
                     return@addSnapshotListener
                 }
 
-                android.util.Log.d(
+                Log.d(
                     "ProductosRepository",
                     "snap=${snap != null} size=${snap?.size() ?: -1} fromCache=${snap?.metadata?.isFromCache}"
                 )
 
-                snap?.documents?.forEach { doc ->
-                    android.util.Log.d("ProductosRepository", "DOC ${doc.id} => ${doc.data}")
+                if (snap == null) {
+                    onResult(emptyList())
+                    return@addSnapshotListener
                 }
 
-                val lista = snap?.documents?.mapNotNull { doc ->
+                snap.documents.forEach { doc ->
+                    Log.d("ProductosRepository", "DOC ${doc.id} => ${doc.data}")
+                }
+
+                val lista = snap.documents.mapNotNull { doc ->
                     try {
-                        doc.toObject(Producto::class.java)?.apply { id = doc.id }
+                        doc.toObject(Producto::class.java)?.copy(id = doc.id)
                     } catch (ex: Exception) {
-                        android.util.Log.e("ProductosRepository", "toObject falló doc=${doc.id} data=${doc.data}", ex)
+                        Log.e(
+                            "ProductosRepository",
+                            "toObject falló doc=${doc.id} data=${doc.data}",
+                            ex
+                        )
                         null
                     }
-                } ?: emptyList()
+                }
 
                 onResult(lista)
             }
@@ -92,7 +101,7 @@ class ProductosRepository(
                     precio = producto.precio,
                     qty = 1,
                     categoria = producto.categoria,
-                    imageUrl = producto.imagenUrl
+                    imageUrl = producto.imageUrl
                 )
             )
         }

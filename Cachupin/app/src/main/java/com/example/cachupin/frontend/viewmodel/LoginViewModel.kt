@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.cachupin.data.repository.AuthRepository
+import com.example.cachupin.backend.data.repository.AuthRepository
 
 data class LoginUiState(
     val email: String = "",

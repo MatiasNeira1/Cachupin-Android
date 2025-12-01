@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.cachupin.data.repository.MenuDestacado
-import com.example.cachupin.data.repository.MenuRepository
+import com.example.cachupin.backend.data.repository.MenuDestacado
+import com.example.cachupin.backend.data.repository.MenuRepository
 
 data class MenuUiState(
     val userName: String = "Invitado",

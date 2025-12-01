@@ -1,4 +1,4 @@
-package com.example.cachupin.data.repository
+package com.example.cachupin.backend.data.repository
 
 import com.example.cachupin.domain.CarritoItem
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,8 +49,7 @@ class CartRepository(
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        // Aquí podrías guardar una orden en Firestore, restar stock, etc.
-        // Por ahora solo simulamos éxito.
+
         onSuccess()
     }
 }

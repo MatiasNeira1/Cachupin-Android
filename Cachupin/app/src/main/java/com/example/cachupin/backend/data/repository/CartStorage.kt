@@ -1,4 +1,4 @@
-package com.example.cachupin.data.repository
+package com.example.cachupin.backend.data.repository
 
 import com.example.cachupin.domain.CarritoItem
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,7 +27,6 @@ object CartStorage {
             }
     }
 
-    // Guardar carrito en Firestore
     fun save(carrito: List<CarritoItem>, onResult: (Boolean) -> Unit) {
         val batch = db.batch()
         carrito.forEachIndexed { index, item ->
@@ -45,22 +44,20 @@ object CartStorage {
         }
     }
 
-    // Eliminar un producto del carrito
     fun remove(item: CarritoItem, onResult: (List<CarritoItem>) -> Unit) {
         db.collection("carrito")
             .whereEqualTo("nombre", item.nombre)
             .get()
             .addOnSuccessListener { snapshot ->
                 snapshot.documents.firstOrNull()?.reference?.delete()?.addOnCompleteListener {
-                    // Después de eliminar el producto del carrito, actualizamos el stock
+
                     updateProductStock(item)
-                    // Recargamos el carrito actualizado
+
                     load(onResult = onResult, onError = {})
                 }
             }
     }
 
-    // Actualizar el stock de un producto en Firestore
     private fun updateProductStock(item: CarritoItem) {
         val productRef = db.collection("productos").document(item.nombre)
         productRef.get().addOnSuccessListener { doc ->

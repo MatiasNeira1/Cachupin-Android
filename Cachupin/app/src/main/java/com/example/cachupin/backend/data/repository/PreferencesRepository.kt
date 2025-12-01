@@ -1,4 +1,4 @@
-package com.example.cachupin.data.repository
+package com.example.cachupin.backend.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences

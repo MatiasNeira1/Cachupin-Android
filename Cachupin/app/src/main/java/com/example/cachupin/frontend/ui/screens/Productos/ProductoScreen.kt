@@ -25,6 +25,8 @@ import com.example.cachupin.frontend.viewmodel.ProductosUiState
 import com.example.cachupin.frontend.viewmodel.ProductosViewModel
 import java.text.NumberFormat
 import java.util.Locale
+import  FirebaseStorageImage
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,7 +100,10 @@ fun ProductosScreen(
 
                 else -> {
                     LazyColumn(Modifier.fillMaxSize()) {
-                        items(uiState.productos) { producto ->
+                        items(
+                            items = uiState.productos,
+                            key = { it.id }
+                        ) { producto ->
                             ProductoCard(
                                 producto = producto,
                                 onAddToCart = {
@@ -142,15 +147,14 @@ fun ProductoCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(Modifier.fillMaxWidth()) {
-            if (producto.imagenUrl.isNotBlank()) {
-                AsyncImage(
-                    model = producto.imagenUrl,
+            if (producto.imageUrl.isNotBlank()) {
+                FirebaseStorageImage(
+                    storageRefOrGsUrl = producto.imageUrl,
                     contentDescription = producto.nombre,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp),
-                    contentScale = ContentScale.Crop
+                    modifier = Modifier.fillMaxWidth().height(180.dp)
                 )
+            } else {
+                Text("Imagen no disponible")
             }
 
             Column(

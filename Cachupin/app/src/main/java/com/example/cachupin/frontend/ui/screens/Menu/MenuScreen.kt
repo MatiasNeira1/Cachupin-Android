@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cachupin.R
-import com.example.cachupin.data.repository.MenuDestacado
+import com.example.cachupin.backend.data.repository.MenuDestacado
 import com.example.cachupin.frontend.viewmodel.MenuUiState
 import com.example.cachupin.frontend.viewmodel.MenuViewModel
 import kotlinx.coroutines.delay

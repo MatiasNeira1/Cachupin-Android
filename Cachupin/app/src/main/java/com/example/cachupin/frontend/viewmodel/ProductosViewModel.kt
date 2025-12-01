@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.cachupin.data.repository.ProductosRepository
+import com.example.cachupin.backend.data.repository.ProductosRepository
 import com.example.cachupin.domain.CarritoItem
 import com.example.cachupin.domain.Producto
 import com.google.firebase.firestore.ListenerRegistration
