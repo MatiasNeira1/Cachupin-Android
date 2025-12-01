@@ -18,6 +18,7 @@ import com.example.cachupin.frontend.ui.screens.ScanPet.ScanPetScreen
 import com.example.cachupin.frontend.ui.screens.Login.LoginScreen
 
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

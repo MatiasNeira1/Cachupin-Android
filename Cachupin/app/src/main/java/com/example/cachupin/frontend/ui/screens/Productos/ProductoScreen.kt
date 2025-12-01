@@ -1,13 +1,13 @@
 package com.example.cachupin.frontend.ui.screens.Productos
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import coil.compose.AsyncImage
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -41,7 +41,9 @@ fun ProductosScreen(
                 title = { Text("Cachupin", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver")
                     }
                 },
                 actions = {
@@ -140,14 +142,17 @@ fun ProductoCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Image(
-                painter = rememberImagePainter(producto.imageUrl),
-                contentDescription = producto.nombre,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp),
-                contentScale = ContentScale.Crop
-            )
+            if (producto.imagenUrl.isNotBlank()) {
+                AsyncImage(
+                    model = producto.imagenUrl,
+                    contentDescription = producto.nombre,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,19 +163,50 @@ fun ProductoCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
+                if (producto.descripcion.isNotBlank()) {
+                    Text(
+                        producto.descripcion,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Text(
-                    producto.categoria,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.secondary
+                    "Categoría: ${producto.categoria}",
+                    style = MaterialTheme.typography.labelMedium
                 )
+                if (producto.material.isNotBlank()) {
+                    Text(
+                        "Material: ${producto.material}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                if (producto.peso.isNotBlank()) {
+                    Text(
+                        "Peso: ${producto.peso}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Text(
+                    "Stock: ${producto.stock}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+
                 Text(
                     formatCLP(producto.precio),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
+
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onAddToCart, modifier = Modifier.fillMaxWidth()) {
-                    Text("Añadir al carrito")
+
+                Button(
+                    onClick = onAddToCart,
+                    enabled = producto.stock > 0,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        if (producto.stock > 0) "Añadir al carrito"
+                        else "Sin stock"
+                    )
                 }
             }
         }

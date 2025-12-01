@@ -49,7 +49,8 @@ class CartRepository(
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ) {
-
+        // Aquí podrías guardar una orden en Firestore, restar stock, etc.
+        // Por ahora solo simulamos éxito.
         onSuccess()
     }
 }

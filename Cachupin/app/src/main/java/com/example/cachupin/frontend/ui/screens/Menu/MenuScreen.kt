@@ -1,5 +1,6 @@
 package com.example.cachupin.frontend.ui.screens.Menu
 
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -110,7 +111,7 @@ fun MenuScreen(
                     }
                 )
 
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                 NavigationDrawerItem(
                     label = { Text("Cerrar sesión") },

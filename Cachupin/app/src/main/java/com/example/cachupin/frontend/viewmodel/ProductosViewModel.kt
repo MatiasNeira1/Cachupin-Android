@@ -59,7 +59,7 @@ class ProductosViewModel(
                 uiState = uiState.copy(carrito = items)
             },
             onError = {
-                // Si quieres mostrar error de carrito, puedes setear errorMessage
+                // Si quieres, podrías setear un mensaje de error general aquí
             }
         )
     }

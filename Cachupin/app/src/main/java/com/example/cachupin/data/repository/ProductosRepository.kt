@@ -4,56 +4,54 @@ import com.example.cachupin.domain.CarritoItem
 import com.example.cachupin.domain.Producto
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import android.util.Log
+import com.google.firebase.FirebaseApp
 
 class ProductosRepository(
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance(FirebaseApp.getInstance(), "cachupin-319c4")
 ) {
 
-    /**
-     * Escucha en tiempo real los productos de Firestore.
-     * Devuelve un ListenerRegistration para poder detener la escucha.
-     */
+
     fun listenProductos(
         onResult: (List<Producto>) -> Unit,
         onError: (Throwable) -> Unit
     ): ListenerRegistration {
+        Log.d("FIREBASE_CFG",
+            "projectId=${FirebaseApp.getInstance().options.projectId} " +
+                    "appId=${FirebaseApp.getInstance().options.applicationId}"
+        )
         return db.collection("productos")
             .addSnapshotListener { snap, e ->
                 if (e != null) {
+                    android.util.Log.e("ProductosRepository", "Listener error", e)
                     onError(e)
                     return@addSnapshotListener
                 }
 
-                if (snap == null || snap.isEmpty) {
-                    // Sin productos, devolvemos lista vacía (no es error crítico)
-                    onResult(emptyList())
-                    return@addSnapshotListener
+                android.util.Log.d(
+                    "ProductosRepository",
+                    "snap=${snap != null} size=${snap?.size() ?: -1} fromCache=${snap?.metadata?.isFromCache}"
+                )
+
+                snap?.documents?.forEach { doc ->
+                    android.util.Log.d("ProductosRepository", "DOC ${doc.id} => ${doc.data}")
                 }
 
-                val lista = snap.documents.mapNotNull { doc ->
-                    val nombre = doc.getString("nombre") ?: return@mapNotNull null
-                    val precio = (doc.getLong("precio") ?: return@mapNotNull null).toInt()
-                    val imageUrl = doc.getString("imagenUrl")
-                        ?: doc.getString("imageUrl")
-                        ?: return@mapNotNull null
-                    val categoria = doc.getString("categoria") ?: ""
-                    val stock = (doc.getLong("stock") ?: 0L).toInt()
-
-                    Producto(
-                        nombre = nombre,
-                        precio = precio,
-                        imageUrl = imageUrl,
-                        categoria = categoria,
-                        stock = stock
-                    )
-                }
+                val lista = snap?.documents?.mapNotNull { doc ->
+                    try {
+                        doc.toObject(Producto::class.java)?.apply { id = doc.id }
+                    } catch (ex: Exception) {
+                        android.util.Log.e("ProductosRepository", "toObject falló doc=${doc.id} data=${doc.data}", ex)
+                        null
+                    }
+                } ?: emptyList()
 
                 onResult(lista)
             }
     }
 
     /**
-     * Carga el carrito desde almacenamiento local (CartStorage).
+     * Carga el carrito desde el almacenamiento local (CartStorage).
      */
     fun loadCart(
         onResult: (List<CarritoItem>) -> Unit,
@@ -66,10 +64,7 @@ class ProductosRepository(
     }
 
     /**
-     * Añade un producto al carrito:
-     *  - Actualiza la lista de CarritoItem
-     *  - Guarda el carrito en CartStorage
-     *  - Actualiza el stock en Firestore
+     * Añade un producto al carrito y actualiza el stock en Firestore.
      */
     fun addToCart(
         producto: Producto,
@@ -97,22 +92,26 @@ class ProductosRepository(
                     precio = producto.precio,
                     qty = 1,
                     categoria = producto.categoria,
-                    imageUrl = producto.imageUrl
+                    imageUrl = producto.imagenUrl
                 )
             )
         }
 
         val newList = mutable.toList()
 
+        // Guardar el carrito
         CartStorage.save(newList) { ok ->
             if (!ok) {
                 onError(IllegalStateException("No se pudo guardar el carrito"))
                 return@save
             }
 
+            // Actualizar stock en Firestore
             val newStock = producto.stock - 1
+            val docId = if (producto.id.isNotBlank()) producto.id else producto.nombre
+
             db.collection("productos")
-                .document(producto.nombre)
+                .document(docId)
                 .update("stock", newStock)
                 .addOnSuccessListener {
                     onResult(newList)
