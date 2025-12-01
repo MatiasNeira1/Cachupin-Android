@@ -1,61 +1,44 @@
 package com.example.cachupin.frontend.ui.screens.Carrito
 
-import androidx.compose.runtime.Composable
-import androidx.compose.material3.Text
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.cachupin.R
-import com.example.cachupin.frontend.data.repository.CartStorage
 import com.example.cachupin.domain.CarritoItem
-import com.google.firebase.firestore.FirebaseFirestore
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.ui.platform.LocalContext
+import com.example.cachupin.frontend.viewmodel.CartViewModel
+import com.example.cachupin.frontend.viewmodel.CartUiState
 import java.text.NumberFormat
 import java.util.Locale
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CarritoScreen(navController: NavController) {
+fun CarritoScreen(
+    navController: NavController,
+    viewModel: CartViewModel = viewModel()
+) {
     val context = LocalContext.current
-    val db = FirebaseFirestore.getInstance()
-    var carrito by remember { mutableStateOf<List<CarritoItem>>(emptyList()) }
-    val totalItems = carrito.sumOf { it.qty }
-    var isLoading by remember { mutableStateOf(true) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val uiState: CartUiState = viewModel.uiState
     var isCheckoutDialogVisible by remember { mutableStateOf(false) }
-
-    // Cargar carrito desde Firebase
-    LaunchedEffect(Unit) {
-        CartStorage.load(
-            onResult = { items -> carrito = items },
-            onError = { /* log opcional */ }
-        )
-    }
-
-    // Botón de Checkout
-    fun handleCheckout() {
-        isCheckoutDialogVisible = true
-    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Carrito", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { navController?.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
                 }
@@ -63,8 +46,24 @@ fun CarritoScreen(navController: NavController) {
         },
         bottomBar = {
             BottomAppBar {
-                Text("Total: ${formatCLP(carrito.sumOf { it.precio * it.qty })}", modifier = Modifier.weight(1f))
-                Button(onClick = { handleCheckout() }) {
+                val total = uiState.carrito.sumOf { it.precio * it.qty }
+                Text(
+                    "Total: ${formatCLP(total)}",
+                    modifier = Modifier.weight(1f)
+                )
+                Button(
+                    onClick = {
+                        if (uiState.carrito.isEmpty()) {
+                            Toast.makeText(
+                                context,
+                                "El carrito está vacío",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            isCheckoutDialogVisible = true
+                        }
+                    }
+                ) {
                     Text("Checkout")
                 }
             }
@@ -77,55 +76,52 @@ fun CarritoScreen(navController: NavController) {
                 .padding(horizontal = 12.dp)
         ) {
             Spacer(Modifier.height(8.dp))
+
             when {
-                isLoading -> {
+                uiState.isLoading -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
-                errorMessage != null -> {
+
+                uiState.errorMessage != null -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = errorMessage!!, color = MaterialTheme.colorScheme.error)
+                        Text(
+                            text = uiState.errorMessage ?: "",
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                 }
-                carrito.isEmpty() -> {
+
+                uiState.carrito.isEmpty() -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("El carrito está vacío.")
                     }
                 }
+
                 else -> {
                     LazyColumn(Modifier.fillMaxSize()) {
-                        items(carrito) { item ->
+                        items(uiState.carrito) { item ->
                             CarritoItemCard(
                                 item = item,
                                 onRemove = {
-                                    // Actualizar stock en Firestore
-                                    val productRef = db.collection("productos").document(item.nombre)
-                                    productRef.get().addOnSuccessListener { doc ->
-                                        val stock = doc.getLong("stock")?.toInt() ?: 0
-                                        val newStock = stock + item.qty  // Incrementar el stock al eliminar el artículo
-
-                                        // Actualizar el stock
-                                        productRef.update("stock", newStock)
-                                            .addOnSuccessListener {
-                                                // Eliminar producto del carrito
-                                                CartStorage.remove(item) { updatedCart ->
-                                                    carrito = updatedCart
-                                                    Toast.makeText(
-                                                        context,
-                                                        "${item.nombre} eliminado del carrito",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
-                                            .addOnFailureListener {
-                                                Toast.makeText(
-                                                    context,
-                                                    "No se pudo actualizar el stock",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                    }
+                                    viewModel.removeItem(
+                                        item = item,
+                                        onSuccess = { msg ->
+                                            Toast.makeText(
+                                                context,
+                                                msg,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        onError = { msg ->
+                                            Toast.makeText(
+                                                context,
+                                                msg,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -135,7 +131,6 @@ fun CarritoScreen(navController: NavController) {
         }
     }
 
-    // Diálogo de Confirmación de Checkout
     if (isCheckoutDialogVisible) {
         AlertDialog(
             onDismissRequest = { isCheckoutDialogVisible = false },
@@ -143,9 +138,24 @@ fun CarritoScreen(navController: NavController) {
             text = { Text("¿Estás seguro de que deseas finalizar tu compra?") },
             confirmButton = {
                 Button(onClick = {
-                    // Lógica de confirmación de compra
-                    isCheckoutDialogVisible = false
-                    Toast.makeText(context, "Compra realizada con éxito", Toast.LENGTH_SHORT).show()
+                    viewModel.checkout(
+                        onSuccess = {
+                            isCheckoutDialogVisible = false
+                            Toast.makeText(
+                                context,
+                                "Compra realizada con éxito",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onError = { msg ->
+                            isCheckoutDialogVisible = false
+                            Toast.makeText(
+                                context,
+                                msg,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 }) {
                     Text("Confirmar")
                 }
@@ -175,9 +185,16 @@ fun CarritoItemCard(item: CarritoItem, onRemove: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(item.nombre, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Text(
+                    item.nombre,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
                 Text("Cantidad: ${item.qty}", style = MaterialTheme.typography.bodySmall)
-                Text("Precio: ${formatCLP(item.precio * item.qty)}", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    "Precio: ${formatCLP(item.precio * item.qty)}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
             IconButton(onClick = onRemove) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")

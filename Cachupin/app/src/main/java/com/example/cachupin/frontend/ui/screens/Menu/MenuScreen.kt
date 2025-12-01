@@ -20,50 +20,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cachupin.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.cachupin.data.repository.MenuDestacado
+import com.example.cachupin.frontend.viewmodel.MenuUiState
+import com.example.cachupin.frontend.viewmodel.MenuViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class DestacadoProducto(
-    val imageRes: Int,
-    val nombre: String
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(navController: NavController) {
+fun MenuScreen(
+    navController: NavController,
+    viewModel: MenuViewModel = viewModel()
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val auth = FirebaseAuth.getInstance()
-    val db = FirebaseFirestore.getInstance()
-
-    var userName by remember { mutableStateOf("Invitado") }
-    val userEmail = auth.currentUser?.email ?: "Invitado"
-
-    // Obtener el nombre del usuario desde Firestore
-    LaunchedEffect(Unit) {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            db.collection("usuarios").document(userId).get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        userName = document.getString("nombre") ?: "Invitado"
-                    }
-                }
-                .addOnFailureListener {
-                    userName = "Invitado"
-                }
-        }
-    }
+    val uiState: MenuUiState = viewModel.uiState
 
     val images: List<Int> = listOf(
-        R.drawable.correa_gato,
-        R.drawable.comida_gato,
-        R.drawable.juguete_gato
+        R.drawable.banner_img,
+
     )
     var currentImageIndex by remember { mutableStateOf(0) }
 
@@ -72,29 +51,6 @@ fun MenuScreen(navController: NavController) {
             delay(3000)
             currentImageIndex = (currentImageIndex + 1) % images.size
         }
-    }
-
-    var destacados by remember { mutableStateOf<List<DestacadoProducto>>(emptyList()) }
-    var loadingDestacados by remember { mutableStateOf(true) }
-
-    // Cargar productos desde Firestore
-    LaunchedEffect(Unit) {
-        db.collection("productos")
-            .limit(4)
-            .get()
-            .addOnSuccessListener { result ->
-                val lista = result.documents.mapNotNull { doc ->
-                    val nombre = doc.getString("nombre") ?: return@mapNotNull null
-                    val imageKey = doc.getString("imageKey") ?: ""
-                    val imageRes = imageResFromKey(imageKey)
-                    DestacadoProducto(imageRes = imageRes, nombre = nombre)
-                }
-                destacados = lista
-                loadingDestacados = false
-            }
-            .addOnFailureListener {
-                loadingDestacados = false
-            }
     }
 
     ModalNavigationDrawer(
@@ -108,7 +64,7 @@ fun MenuScreen(navController: NavController) {
                 )
 
                 Text(
-                    text = "Hola, $userName",  // Mostrar el nombre del usuario
+                    text = "Hola, ${uiState.userName}",
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
@@ -161,7 +117,7 @@ fun MenuScreen(navController: NavController) {
                     selected = false,
                     onClick = {
                         scope.launch {
-                            auth.signOut()
+                            viewModel.signOut()
                             drawerState.close()
                             navController.navigate("login") {
                                 popUpTo("menu") { inclusive = true }
@@ -206,9 +162,9 @@ fun MenuScreen(navController: NavController) {
                     .verticalScroll(rememberScrollState())
                     .background(MaterialTheme.colorScheme.surface)
             ) {
-                // Banner estático
+                // Banner (si quieres usar el carrusel de imágenes, puedes pasarlo aquí)
                 Banner(
-                    img = R.drawable.banner_img,
+                    img = images[currentImageIndex],
                     height = 450
                 ) {}
 
@@ -222,7 +178,7 @@ fun MenuScreen(navController: NavController) {
                 )
 
                 when {
-                    loadingDestacados -> {
+                    uiState.loadingDestacados -> {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -233,7 +189,18 @@ fun MenuScreen(navController: NavController) {
                         }
                     }
 
-                    destacados.isEmpty() -> {
+                    uiState.errorDestacados != null -> {
+                        Text(
+                            text = uiState.errorDestacados ?: "",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
+                    uiState.destacados.isEmpty() -> {
                         Text(
                             text = "No hay productos destacados por ahora.",
                             modifier = Modifier
@@ -249,9 +216,10 @@ fun MenuScreen(navController: NavController) {
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
-                            items(destacados) { prod ->
+                            items(uiState.destacados) { prod: MenuDestacado ->
+                                val imageRes = imageResFromKey(prod.imageKey)
                                 ProductCard(
-                                    imageRes = prod.imageRes,
+                                    imageRes = imageRes,
                                     onClick = {
                                         navController.navigate("productos")
                                     }

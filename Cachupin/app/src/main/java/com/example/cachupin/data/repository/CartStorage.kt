@@ -1,4 +1,4 @@
-package com.example.cachupin.frontend.data.repository
+package com.example.cachupin.data.repository
 
 import com.example.cachupin.domain.CarritoItem
 import com.google.firebase.firestore.FirebaseFirestore
