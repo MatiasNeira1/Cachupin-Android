@@ -1,6 +1,12 @@
-package com.example.cachupin.ui.screens
+package com.example.cachupin.frontend.ui.screens.DatePicker
 
-import android.annotation.SuppressLint
+import android.Manifest
+import android.app.Activity
+import android.content.ContentValues
+import android.content.Context
+import android.content.pm.PackageManager
+import android.provider.CalendarContract
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -8,34 +14,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
-@SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerScreen(navController: NavController? = null) {
+fun DateSelectionScreen(navController: NavController) {
+    val context = LocalContext.current
+    val today = Calendar.getInstance()
+    today.add(Calendar.DATE, 1)  // Aseguramos que la fecha seleccionada no sea antes de hoy
 
-    // --- Estados de DatePicker y TimePicker (Material 3) ---
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = System.currentTimeMillis()
+        initialSelectedDateMillis = today.timeInMillis
     )
 
     val timePickerState = rememberTimePickerState(
-        initialHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-        initialMinute = Calendar.getInstance().get(Calendar.MINUTE),
+        initialHour = 8,  // Establecemos la hora inicial en 8 AM
+        initialMinute = 0,
         is24Hour = true
     )
 
     var showDateDialog by remember { mutableStateOf(false) }
     var showTimeDialog by remember { mutableStateOf(false) }
+    var selectedDateMillis by remember { mutableStateOf(today.timeInMillis) }
+    var selectedTimeMillis by remember { mutableStateOf(today.timeInMillis) }
 
-    val selectedDateText = datePickerState.selectedDateMillis
-        ?.let { formatDate(it) }
-        ?: "Selecciona una fecha"
+    val selectedDateText = formatDate(selectedDateMillis)
 
     val selectedTimeText = String.format(
         Locale.getDefault(),
@@ -43,24 +51,6 @@ fun DatePickerScreen(navController: NavController? = null) {
         timePickerState.hour,
         timePickerState.minute
     )
-
-    val selectedDateTimeMillis by remember(
-        datePickerState.selectedDateMillis,
-        timePickerState.hour,
-        timePickerState.minute
-    ) {
-        mutableStateOf(
-            datePickerState.selectedDateMillis?.let { baseDate ->
-                Calendar.getInstance().apply {
-                    timeInMillis = baseDate
-                    set(Calendar.HOUR_OF_DAY, timePickerState.hour)
-                    set(Calendar.MINUTE, timePickerState.minute)
-                    set(Calendar.SECOND, 0)
-                    set(Calendar.MILLISECOND, 0)
-                }.timeInMillis
-            }
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -87,25 +77,17 @@ fun DatePickerScreen(navController: NavController? = null) {
                 Text("Elegir Fecha")
             }
 
-            Text(
-                text = "Hora seleccionada:",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-            )
-            Text(text = selectedTimeText)
-
-            Button(onClick = { showTimeDialog = true }) {
-                Text("Elegir Hora")
-            }
-
-            Spacer(Modifier.height(32.dp))
 
             Button(
                 onClick = {
-                    navController?.navigate("next_screen")
+                    val millis = selectedDateMillis
+                    if (millis > 0) {
+                        navController.navigate("select_time/$millis")
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
-                Text("Guardar")
+                Text("Seleccionar horario")
             }
         }
     }
@@ -114,7 +96,10 @@ fun DatePickerScreen(navController: NavController? = null) {
         DatePickerDialog(
             onDismissRequest = { showDateDialog = false },
             confirmButton = {
-                TextButton(onClick = { showDateDialog = false }) {
+                TextButton(onClick = {
+                    selectedDateMillis = datePickerState.selectedDateMillis ?: selectedDateMillis
+                    showDateDialog = false
+                }) {
                     Text("Aceptar")
                 }
             },
@@ -128,12 +113,18 @@ fun DatePickerScreen(navController: NavController? = null) {
         }
     }
 
-    // -------- Dialogo de HORA (Material3) --------
     if (showTimeDialog) {
         AlertDialog(
             onDismissRequest = { showTimeDialog = false },
             confirmButton = {
-                TextButton(onClick = { showTimeDialog = false }) {
+                TextButton(onClick = {
+                    selectedTimeMillis = Calendar.getInstance().apply {
+                        timeInMillis = selectedDateMillis
+                        set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                        set(Calendar.MINUTE, timePickerState.minute)
+                    }.timeInMillis
+                    showTimeDialog = false
+                }) {
                     Text("Aceptar")
                 }
             },
@@ -149,6 +140,7 @@ fun DatePickerScreen(navController: NavController? = null) {
         )
     }
 }
+
 
 private fun formatDate(timestamp: Long): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

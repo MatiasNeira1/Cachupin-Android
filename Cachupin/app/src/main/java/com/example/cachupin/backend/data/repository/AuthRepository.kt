@@ -1,11 +1,13 @@
 package com.example.cachupin.backend.data.repository
 
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AuthRepository(
     private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
 ) {
 
     fun registerUser(

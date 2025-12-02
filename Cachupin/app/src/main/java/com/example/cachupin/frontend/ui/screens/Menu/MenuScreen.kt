@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cachupin.R
-import com.example.cachupin.domain.MenuDestacado
 import com.example.cachupin.frontend.viewmodel.MenuUiState
 import com.example.cachupin.frontend.viewmodel.MenuViewModel
 import kotlinx.coroutines.delay
@@ -95,7 +94,7 @@ fun MenuScreen(
                     onClick = {
                         scope.launch {
                             drawerState.close()
-                            navController.navigate("Hora")
+                            navController.navigate("date_selection")
                         }
                     }
                 )
@@ -109,8 +108,21 @@ fun MenuScreen(
                         }
                     }
                 )
-
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+                NavigationDrawerItem(
+                    label = { Text("Ver mi perfil") },
+                    selected = false,
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate("profile/{uid}")
+                        }
+                    }
+                )
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                )
 
                 NavigationDrawerItem(
                     label = { Text("Cerrar sesión") },
