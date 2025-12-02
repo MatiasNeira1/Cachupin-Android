@@ -25,7 +25,7 @@ import com.example.cachupin.frontend.viewmodel.ProductosUiState
 import com.example.cachupin.frontend.viewmodel.ProductosViewModel
 import java.text.NumberFormat
 import java.util.Locale
-import  FirebaseStorageImage
+import com.example.cachupin.frontend.ui.components.FirebaseStorageImage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,6 +136,7 @@ fun ProductosScreen(
 
 @Composable
 fun ProductoCard(
+
     producto: Producto,
     onAddToCart: () -> Unit
 ) {

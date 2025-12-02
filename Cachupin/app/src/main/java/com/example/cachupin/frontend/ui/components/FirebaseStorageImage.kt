@@ -1,72 +1,83 @@
-import android.util.Log
+package com.example.cachupin.frontend.ui.components
+
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Muestra una imagen almacenada en Firebase Storage.
+ *
+ * @param storageRefOrGsUrl puede ser:
+ *  - Un path relativo en Storage, por ejemplo: "productos/perro/comida1.png"
+ *  - O una URL gs:// completa de Firebase Storage.
+ */
 @Composable
 fun FirebaseStorageImage(
-    storageRefOrGsUrl: String, // acepta gs://... o "Productos/..."
+    storageRefOrGsUrl: String,
     contentDescription: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
-    var httpsUrl by remember(storageRefOrGsUrl) { mutableStateOf<String?>(null) }
-    var error by remember(storageRefOrGsUrl) { mutableStateOf<String?>(null) }
+    var downloadUrl by remember { mutableStateOf<String?>(null) }
+    var hasTried by remember { mutableStateOf(false) }
 
     LaunchedEffect(storageRefOrGsUrl) {
-        httpsUrl = null
-        error = null
-        try {
-            val storage = FirebaseStorage.getInstance()
+        if (storageRefOrGsUrl.isBlank()) {
+            downloadUrl = null
+            hasTried = true
+            return@LaunchedEffect
+        }
 
-            val ref = if (storageRefOrGsUrl.startsWith("gs://")) {
-                storage.getReferenceFromUrl(storageRefOrGsUrl)
-            } else {
-                storage.reference.child(storageRefOrGsUrl) // ej: "Productos/comida_perro3.webp"
-            }
+        val storage = FirebaseStorage.getInstance()
+        val ref = if (storageRefOrGsUrl.startsWith("gs://")) {
+            storage.getReferenceFromUrl(storageRefOrGsUrl)
+        } else {
+            storage.reference.child(storageRefOrGsUrl)
+        }
 
-            httpsUrl = ref.downloadUrl.await().toString()
-            Log.d("IMG_STORAGE", "OK -> $httpsUrl")
-        } catch (e: CancellationException) {
-            // normal cuando haces scroll/recomposición
-            Log.d("IMG_STORAGE", "CANCEL")
+        downloadUrl = try {
+            hasTried = true
+            ref.downloadUrl.await().toString()
         } catch (e: Exception) {
-            Log.e("IMG_STORAGE", "FAIL from=$storageRefOrGsUrl", e)
-            error = e.message ?: "error"
+            null
         }
     }
 
     when {
-        httpsUrl != null -> {
+        downloadUrl != null -> {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(httpsUrl)
-                    .crossfade(true)
-                    .build(),
+                model = downloadUrl,
                 contentDescription = contentDescription,
-                modifier = modifier
+                modifier = modifier,
+                contentScale = contentScale
             )
         }
-        error != null -> {
-            // temporal: muestra el error real para arreglarlo rápido
-            Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                Text("Imagen no disponible\n$error")
+
+        hasTried -> {
+            // Placeholder si no se pudo cargar la imagen
+            Box(
+                modifier = modifier,
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Image,
+                    contentDescription = contentDescription ?: ""
+                )
             }
         }
+
         else -> {
-            Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(modifier = Modifier.size(26.dp))
-            }
+            // Mientras aún no se resuelve nada, mostramos un contenedor vacío
+            Box(modifier = modifier)
         }
     }
 }

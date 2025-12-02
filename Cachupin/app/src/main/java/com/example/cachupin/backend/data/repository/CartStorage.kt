@@ -6,7 +6,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 object CartStorage {
     private val db = FirebaseFirestore.getInstance()
 
-    // Cargar carrito desde Firestore
     fun load(onResult: (List<CarritoItem>) -> Unit, onError: (Exception) -> Unit) {
         db.collection("carrito")
             .get()
@@ -31,30 +30,52 @@ object CartStorage {
         val batch = db.batch()
         carrito.forEachIndexed { index, item ->
             val docRef = db.collection("carrito").document("item_$index")
-            batch.set(docRef, mapOf(
-                "nombre" to item.nombre,
-                "precio" to item.precio,
-                "qty" to item.qty,
-                "categoria" to item.categoria,
-                "imageUrl" to item.imageUrl
-            ))
+            batch.set(
+                docRef,
+                mapOf(
+                    "nombre" to item.nombre,
+                    "precio" to item.precio,
+                    "qty" to item.qty,
+                    "categoria" to item.categoria,
+                    "imageUrl" to item.imageUrl
+                )
+            )
         }
         batch.commit().addOnCompleteListener { task ->
             onResult(task.isSuccessful)
         }
     }
 
-    fun remove(item: CarritoItem, onResult: (List<CarritoItem>) -> Unit) {
+    fun remove(
+        item: CarritoItem,
+        onResult: (List<CarritoItem>) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         db.collection("carrito")
             .whereEqualTo("nombre", item.nombre)
             .get()
             .addOnSuccessListener { snapshot ->
-                snapshot.documents.firstOrNull()?.reference?.delete()?.addOnCompleteListener {
-
-                    updateProductStock(item)
-
-                    load(onResult = onResult, onError = {})
+                if (snapshot.isEmpty) {
+                    load(onResult = onResult, onError = onError)
+                    return@addOnSuccessListener
                 }
+
+                val batch = db.batch()
+                snapshot.documents.forEach { doc ->
+                    batch.delete(doc.reference)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        updateProductStock(item)
+                        load(onResult = onResult, onError = onError)
+                    }
+                    .addOnFailureListener { e ->
+                        onError(e)
+                    }
+            }
+            .addOnFailureListener { e ->
+                onError(e)
             }
     }
 

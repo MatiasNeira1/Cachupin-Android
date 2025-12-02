@@ -1,11 +1,8 @@
 package com.example.cachupin.backend.data.repository
 
 import com.example.cachupin.domain.CarritoItem
-import com.google.firebase.firestore.FirebaseFirestore
 
-class CartRepository(
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-) {
+class CartRepository {
 
     fun loadCart(
         onResult: (List<CarritoItem>) -> Unit,
@@ -13,7 +10,7 @@ class CartRepository(
     ) {
         CartStorage.load(
             onResult = onResult,
-            onError = onError
+            onError = { e -> onError(e) }
         )
     }
 
@@ -22,26 +19,11 @@ class CartRepository(
         onResult: (List<CarritoItem>) -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        val productRef = db.collection("productos").document(item.nombre)
-
-        productRef.get()
-            .addOnSuccessListener { doc ->
-                val stockActual = doc.getLong("stock")?.toInt() ?: 0
-                val newStock = stockActual + item.qty
-
-                productRef.update("stock", newStock)
-                    .addOnSuccessListener {
-                        CartStorage.remove(item) { updatedCart ->
-                            onResult(updatedCart)
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        onError(e)
-                    }
-            }
-            .addOnFailureListener { e ->
-                onError(e)
-            }
+        CartStorage.remove(
+            item = item,
+            onResult = onResult,
+            onError = { e -> onError(e) }
+        )
     }
 
     fun checkout(

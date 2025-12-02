@@ -1,12 +1,9 @@
 package com.example.cachupin.backend.data.repository
 
+import android.util.Log
+import com.example.cachupin.domain.MenuDestacado
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
-data class MenuDestacado(
-    val nombre: String,
-    val imageKey: String
-)
 
 class MenuRepository(
     private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
@@ -46,23 +43,31 @@ class MenuRepository(
         onError: (Throwable) -> Unit
     ) {
         db.collection("productos")
+            .orderBy("nombre")
             .limit(limit)
             .get()
             .addOnSuccessListener { result ->
-                val lista = result.documents.mapNotNull { doc ->
-                    val nombre = doc.getString("nombre") ?: return@mapNotNull null
-                    val imageKey = doc.getString("imageKey") ?: ""
+                android.util.Log.d("MenuRepository", "Docs en productos: ${result.size()}")
+
+                val lista = result.documents.map { doc ->
+                    val nombre = doc.getString("nombre") ?: doc.id
+                    val imageUrl = doc.getString("imageUrl") ?: ""
+
                     MenuDestacado(
                         nombre = nombre,
-                        imageKey = imageKey
+                        imageUrl = imageUrl
                     )
                 }
+
+                android.util.Log.d("MenuRepository", "Destacados mapeados: ${lista.size}")
                 onResult(lista)
             }
             .addOnFailureListener { e ->
+                android.util.Log.e("MenuRepository", "Error cargando destacados", e)
                 onError(e)
             }
     }
+
 
     fun signOut() {
         auth.signOut()

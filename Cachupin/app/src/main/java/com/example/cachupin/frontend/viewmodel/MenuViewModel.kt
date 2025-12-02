@@ -4,14 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.cachupin.backend.data.repository.MenuDestacado
 import com.example.cachupin.backend.data.repository.MenuRepository
+import com.example.cachupin.domain.MenuDestacado
 
 data class MenuUiState(
     val userName: String = "Invitado",
     val userEmail: String = "Invitado",
     val destacados: List<MenuDestacado> = emptyList(),
-    val loadingDestacados: Boolean = false,
+    val loadingDestacados: Boolean = true,
     val errorDestacados: String? = null
 )
 

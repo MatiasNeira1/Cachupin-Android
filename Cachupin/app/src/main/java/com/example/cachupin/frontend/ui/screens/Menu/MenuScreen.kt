@@ -1,9 +1,9 @@
 package com.example.cachupin.frontend.ui.screens.Menu
 
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import com.example.cachupin.frontend.ui.components.FirebaseStorageImage
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cachupin.R
-import com.example.cachupin.backend.data.repository.MenuDestacado
+import com.example.cachupin.domain.MenuDestacado
 import com.example.cachupin.frontend.viewmodel.MenuUiState
 import com.example.cachupin.frontend.viewmodel.MenuViewModel
 import kotlinx.coroutines.delay
@@ -42,8 +42,7 @@ fun MenuScreen(
     val uiState: MenuUiState = viewModel.uiState
 
     val images: List<Int> = listOf(
-        R.drawable.banner_img,
-
+        R.drawable.banner_img
     )
     var currentImageIndex by remember { mutableStateOf(0) }
 
@@ -111,7 +110,7 @@ fun MenuScreen(
                     }
                 )
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
 
                 NavigationDrawerItem(
                     label = { Text("Cerrar sesión") },
@@ -163,7 +162,7 @@ fun MenuScreen(
                     .verticalScroll(rememberScrollState())
                     .background(MaterialTheme.colorScheme.surface)
             ) {
-                // Banner (si quieres usar el carrusel de imágenes, puedes pasarlo aquí)
+                // Banner
                 Banner(
                     img = images[currentImageIndex],
                     height = 450
@@ -202,8 +201,7 @@ fun MenuScreen(
                     }
 
                     uiState.destacados.isEmpty() -> {
-                        Text(
-                            text = "No hay productos destacados por ahora.",
+                        Text("No hay productos destacados por ahora.",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -217,13 +215,11 @@ fun MenuScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
-                            items(uiState.destacados) { prod: MenuDestacado ->
-                                val imageRes = imageResFromKey(prod.imageKey)
-                                ProductCard(
-                                    imageRes = imageRes,
-                                    onClick = {
-                                        navController.navigate("productos")
-                                    }
+                            items(uiState.destacados) { prod ->
+                                DestacadoCard(
+                                    nombre = prod.nombre,
+                                    imageUrl = prod.imageUrl,
+                                    onClick = { navController.navigate("productos") }
                                 )
                             }
                         }
@@ -235,20 +231,47 @@ fun MenuScreen(
 }
 
 @Composable
-fun ProductCard(imageRes: Int, onClick: () -> Unit) {
-    Card(
+fun DestacadoCard(
+    nombre: String,
+    imageUrl: String,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(end = 16.dp)
-            .size(150.dp)
-            .clickable(onClick = onClick),
-        shape = CircleShape,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .width(150.dp)
+            .clickable(onClick = onClick)
     ) {
-        Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = "Producto",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+        Card(
+            modifier = Modifier.size(120.dp),
+            shape = CircleShape,
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            if (imageUrl.isNotBlank()) {
+                FirebaseStorageImage(
+                    storageRefOrGsUrl = imageUrl,
+                    contentDescription = nombre,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Sin imagen")
+                }
+            }
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = nombre,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1
         )
     }
 }
@@ -287,16 +310,3 @@ fun Banner(
         }
     }
 }
-
-private fun imageResFromKey(key: String): Int =
-    when (key) {
-        "correa_gato" -> R.drawable.correa_gato
-        "comida_gato" -> R.drawable.comida_gato
-        "caja_arena_gato" -> R.drawable.caja_arena_gato
-        "juguete_gato" -> R.drawable.juguete_gato
-        "comida_perro1" -> R.drawable.comida_perro1
-        "comida_perro2" -> R.drawable.comida_perro2
-        "comida_perro3" -> R.drawable.comida_perro3
-        "comida_perro4" -> R.drawable.comida_perro4
-        else -> R.drawable.comida_perro1
-    }

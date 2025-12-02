@@ -40,7 +40,7 @@ sealed class Route(val path: String) {
     object Carrito : Route("carrito")
     object Register : Route("register")
     object ScanPet : Route("scanpet")
-    object DatePicker : Route("datepicker")
+    object DatePicker : Route("Hora")
 }
 
 @Composable

@@ -54,7 +54,7 @@ class CartViewModel(
                 onSuccess("${item.nombre} eliminado del carrito")
             },
             onError = {
-                onError("No se pudo actualizar el stock")
+                onError("No se pudo actualizar el stock en la base de datos")
             }
         )
     }

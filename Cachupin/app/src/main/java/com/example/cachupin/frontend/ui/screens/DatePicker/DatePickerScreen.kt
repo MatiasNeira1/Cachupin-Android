@@ -33,7 +33,6 @@ fun DatePickerScreen(navController: NavController? = null) {
     var showDateDialog by remember { mutableStateOf(false) }
     var showTimeDialog by remember { mutableStateOf(false) }
 
-    // Texto mostrado en pantalla
     val selectedDateText = datePickerState.selectedDateMillis
         ?.let { formatDate(it) }
         ?: "Selecciona una fecha"
@@ -45,7 +44,6 @@ fun DatePickerScreen(navController: NavController? = null) {
         timePickerState.minute
     )
 
-    // Combinar fecha + hora en un solo millis (por si lo quieres guardar)
     val selectedDateTimeMillis by remember(
         datePickerState.selectedDateMillis,
         timePickerState.hour,
@@ -79,7 +77,6 @@ fun DatePickerScreen(navController: NavController? = null) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            // -------- FECHA --------
             Text(
                 text = "Fecha seleccionada:",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
@@ -90,7 +87,6 @@ fun DatePickerScreen(navController: NavController? = null) {
                 Text("Elegir Fecha")
             }
 
-            // -------- HORA --------
             Text(
                 text = "Hora seleccionada:",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
@@ -105,8 +101,6 @@ fun DatePickerScreen(navController: NavController? = null) {
 
             Button(
                 onClick = {
-                    // Aquí ya tienes selectedDateTimeMillis con fecha + hora
-                    // Puedes mandarlo a la siguiente pantalla en el navigate si quieres
                     navController?.navigate("next_screen")
                 },
                 modifier = Modifier.fillMaxWidth(0.8f)
@@ -116,7 +110,6 @@ fun DatePickerScreen(navController: NavController? = null) {
         }
     }
 
-    // -------- Dialogo de FECHA (Material3) --------
     if (showDateDialog) {
         DatePickerDialog(
             onDismissRequest = { showDateDialog = false },
