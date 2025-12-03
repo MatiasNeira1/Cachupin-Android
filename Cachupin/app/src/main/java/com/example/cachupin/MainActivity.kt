@@ -17,6 +17,7 @@ import com.example.cachupin.frontend.ui.screens.DatePicker.SelectTimeScreen
 import com.example.cachupin.frontend.ui.screens.Register.RegisterScreen
 import com.example.cachupin.frontend.ui.screens.ScanPet.ScanPetScreen
 import com.example.cachupin.frontend.ui.screens.Login.LoginScreen
+import com.example.cachupin.frontend.ui.screens.Profile.ProfileScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -42,8 +43,8 @@ sealed class Route(val path: String) {
     object ScanPet : Route("scanpet")
     object SelectTime : Route("select_time/{millis}")
     object DateSelection : Route("date_selection")
-    object Profile : Route("profile/{uid}") // Ruta del perfil
-    object EditProfile : Route("edit_profile/{uid}") // Ruta de editar perfil
+    object Profile : Route("profile/{uid}")
+
 }
 
 @Composable
@@ -61,6 +62,10 @@ fun AppNavigation() {
             val millis = backStackEntry.arguments?.getString("millis")?.toLong() ?: -1L
             val uid = "uniqueUserId123"
             SelectTimeScreen(navController, millis, uid)
+        }
+        composable(Route.Profile.path) { backStackEntry ->
+            val uid = backStackEntry.arguments?.getString("uid") ?: ""
+            ProfileScreen(navController, uid)
         }
 
     }

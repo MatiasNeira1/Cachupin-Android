@@ -28,6 +28,9 @@ import com.example.cachupin.frontend.viewmodel.MenuUiState
 import com.example.cachupin.frontend.viewmodel.MenuViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +40,7 @@ fun MenuScreen(
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val uiState: MenuUiState = viewModel.uiState
 
@@ -112,9 +116,12 @@ fun MenuScreen(
                     label = { Text("Ver mi perfil") },
                     selected = false,
                     onClick = {
-                        scope.launch {
-                            drawerState.close()
-                            navController.navigate("profile/{uid}")
+                        val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+                        if (uid != null) {
+                            navController.navigate("profile/$uid")
+                        } else {
+                            Toast.makeText(context, "No hay sesión activa", Toast.LENGTH_SHORT).show()
                         }
                     }
                 )
