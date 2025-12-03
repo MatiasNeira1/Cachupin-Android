@@ -37,6 +37,7 @@ fun ProductosScreen(
     val context = LocalContext.current
     val uiState: ProductosUiState = viewModel.uiState
 
+
     Scaffold(
         topBar = {
             TopAppBar(

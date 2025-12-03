@@ -58,7 +58,24 @@ class CartViewModel(
             }
         )
     }
+    fun updateQuantity(
+        item: CarritoItem,
+        newQty: Int,
+        onError: (String) -> Unit
+    ) {
+        if (newQty <= 0) return  // Seguridad mínima
 
+        repository.updateItemQuantity(
+            item = item,
+            newQty = newQty,
+            onResult = { updatedCart ->
+                uiState = uiState.copy(carrito = updatedCart)
+            },
+            onError = {
+                onError("No se pudo actualizar la cantidad en la base de datos")
+            }
+        )
+    }
     fun checkout(
         onSuccess: () -> Unit,
         onError: (String) -> Unit

@@ -13,7 +13,19 @@ class CartRepository {
             onError = { e -> onError(e) }
         )
     }
-
+    fun updateItemQuantity(
+        item: CarritoItem,
+        newQty: Int,
+        onResult: (List<CarritoItem>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        CartStorage.updateItemQuantity(
+            item = item,
+            newQty = newQty,
+            onResult = onResult,
+            onError = { e -> onError(e) }
+        )
+    }
     fun removeItem(
         item: CarritoItem,
         onResult: (List<CarritoItem>) -> Unit,

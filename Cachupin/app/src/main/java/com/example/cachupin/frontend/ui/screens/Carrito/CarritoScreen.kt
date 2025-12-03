@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.navigation.NavController
 import com.example.cachupin.domain.CarritoItem
 import com.example.cachupin.frontend.viewmodel.CartViewModel
@@ -122,6 +124,19 @@ fun CarritoScreen(
                                             ).show()
                                         }
                                     )
+                                },
+                                onQuantityChange = { newQty ->
+                                    viewModel.updateQuantity(
+                                        item = item,
+                                        newQty = newQty,
+                                        onError = { msg ->
+                                            Toast.makeText(
+                                                context,
+                                                msg,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -170,7 +185,11 @@ fun CarritoScreen(
 }
 
 @Composable
-fun CarritoItemCard(item: CarritoItem, onRemove: () -> Unit) {
+fun CarritoItemCard(
+    item: CarritoItem,
+    onRemove: () -> Unit,
+    onQuantityChange: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -182,7 +201,8 @@ fun CarritoItemCard(item: CarritoItem, onRemove: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -190,18 +210,63 @@ fun CarritoItemCard(item: CarritoItem, onRemove: () -> Unit) {
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold
                 )
-                Text("Cantidad: ${item.qty}", style = MaterialTheme.typography.bodySmall)
+
+                Spacer(Modifier.height(4.dp))
+
+                // Fila para la cantidad con botones - y +
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Cantidad: ", style = MaterialTheme.typography.bodySmall)
+
+                    IconButton(
+                        onClick = {
+                            if (item.qty > 1) {
+                                onQuantityChange(item.qty - 1)
+                            }
+                            // Si quieres que al llegar a 1 y restar elimine el item:
+                            // else onRemove()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Disminuir cantidad"
+                        )
+                    }
+
+                    Text(
+                        text = item.qty.toString(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    IconButton(
+                        onClick = {
+                            onQuantityChange(item.qty + 1)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Aumentar cantidad"
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(4.dp))
+
                 Text(
                     "Precio: ${formatCLP(item.precio * item.qty)}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+
             IconButton(onClick = onRemove) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
     }
 }
+
 
 private fun formatCLP(value: Int): String {
     val cl = Locale.Builder().setLanguage("es").setRegion("CL").build()

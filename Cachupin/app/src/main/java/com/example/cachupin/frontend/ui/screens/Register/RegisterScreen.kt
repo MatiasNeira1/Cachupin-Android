@@ -34,7 +34,6 @@ fun RegisterScreen(
 
         Spacer(Modifier.height(20.dp))
 
-        // Nombre
         OutlinedTextField(
             value = uiState.name,
             onValueChange = { viewModel.onNameChange(it) },
@@ -45,7 +44,6 @@ fun RegisterScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Correo electrónico
         OutlinedTextField(
             value = uiState.email,
             onValueChange = { viewModel.onEmailChange(it) },
@@ -56,7 +54,6 @@ fun RegisterScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Contraseña
         OutlinedTextField(
             value = uiState.password,
             onValueChange = { viewModel.onPasswordChange(it) },
@@ -68,7 +65,6 @@ fun RegisterScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Confirmación de Contraseña
         OutlinedTextField(
             value = uiState.confirmPassword,
             onValueChange = { viewModel.onConfirmPasswordChange(it) },
@@ -78,7 +74,6 @@ fun RegisterScreen(
             isError = uiState.errorMessage != null
         )
 
-        // Mensaje de error
         uiState.errorMessage?.let { msg ->
             Text(
                 text = msg,
@@ -93,8 +88,13 @@ fun RegisterScreen(
         Button(
             onClick = {
                 viewModel.register(
-                    onSuccess = {
-                        Toast.makeText(context, "Usuario registrado", Toast.LENGTH_SHORT).show()
+                    onSuccess = { name ->
+                        Toast.makeText(
+                            context,
+                            "Bienvenido $name",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         navController.navigate("login") {
                             popUpTo("register") { inclusive = true }
                         }
@@ -107,7 +107,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = !uiState.isLoading
         ) {
-            Text(if (uiState.isLoading) "Registrando..." else "Registrarse")
+            Text("Registrarse")
         }
     }
 }

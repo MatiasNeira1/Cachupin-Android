@@ -48,7 +48,7 @@ class RegisterViewModel(
     }
 
     fun register(
-        onSuccess: () -> Unit,
+        onSuccess: (String) -> Unit,          // 👈 ahora devuelve el nombre
         onErrorToast: (String) -> Unit
     ) {
         val state = uiState
@@ -84,8 +84,9 @@ class RegisterViewModel(
             email = state.email,
             password = state.password,
             onSuccess = {
+                val nameToShow = state.name.ifBlank { "Usuario" }
                 uiState = uiState.copy(isLoading = false)
-                onSuccess()
+                onSuccess(nameToShow)
             },
             onError = { e ->
                 val msg = e.message ?: "Error al registrar"

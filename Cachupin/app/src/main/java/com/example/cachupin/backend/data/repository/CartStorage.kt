@@ -25,6 +25,38 @@ object CartStorage {
                 onError(e)
             }
     }
+    fun updateItemQuantity(
+        item: CarritoItem,
+        newQty: Int,
+        onResult: (List<CarritoItem>) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.collection("carrito")
+            .whereEqualTo("nombre", item.nombre)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    load(onResult = onResult, onError = onError)
+                    return@addOnSuccessListener
+                }
+
+                val batch = db.batch()
+                snapshot.documents.forEach { doc ->
+                    batch.update(doc.reference, "qty", newQty)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        load(onResult = onResult, onError = onError)
+                    }
+                    .addOnFailureListener { e ->
+                        onError(e)
+                    }
+            }
+            .addOnFailureListener { e ->
+                onError(e)
+            }
+    }
 
     fun save(carrito: List<CarritoItem>, onResult: (Boolean) -> Unit) {
         val batch = db.batch()

@@ -1,5 +1,6 @@
 package com.example.cachupin.backend.data.repository
 
+import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,11 +42,8 @@ class AuthRepository(
                 db.collection("usuarios")
                     .document(uid)
                     .set(userData)
-                    .addOnSuccessListener {
-                        onSuccess()
-                    }
                     .addOnFailureListener { e ->
-                        onError(e)
+                        Log.e("AuthRepository", "Error guardando datos de usuario", e)
                     }
             }
     }
