@@ -1,4 +1,4 @@
-package com.example.cachupin.frontend.ui.screens.Profile.Login
+package com.example.cachupin.frontend.ui.screens.Login
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
