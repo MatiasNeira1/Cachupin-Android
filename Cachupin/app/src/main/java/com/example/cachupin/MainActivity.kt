@@ -16,7 +16,7 @@ import com.example.cachupin.frontend.ui.screens.DatePicker.DateSelectionScreen
 import com.example.cachupin.frontend.ui.screens.DatePicker.SelectTimeScreen
 import com.example.cachupin.frontend.ui.screens.Register.RegisterScreen
 import com.example.cachupin.frontend.ui.screens.ScanPet.ScanPetScreen
-import com.example.cachupin.frontend.ui.screens.Login.LoginScreen
+import com.example.cachupin.frontend.ui.screens.Profile.Login.LoginScreen
 import com.example.cachupin.frontend.ui.screens.Profile.ProfileScreen
 
 
